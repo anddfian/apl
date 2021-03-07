@@ -2,7 +2,7 @@
 - Mata Kuliah: Algoritma Pemrograman Lanjut
 - Kelas: Informatika A 2020
 - Dosen Pembimbing: Awang Harsa K, M. Kom & Ir. Novianti Puspitasari, M. Eng
-- Bahasa Pemrograman: Python / C++
+- Bahasa Pemrograman: Python / C++ / C
 
 # Algoritma Sorting dengan metode Quick Sort
 1.	Tulis “Masukkan banyak huruf: “
