@@ -103,6 +103,7 @@ def show_menu():
         print("[1] Jumlah data")
         print("[2] Jumlah suatu data")
         print("[3] Total data")
+        print("[4] Back")
         print("[0] Exit")
         print("-----------------------------------")
         selected_menu = input("Pilih menu> ")
@@ -112,6 +113,8 @@ def show_menu():
             total_list_count()
         elif(selected_menu == "3"):
             total_list_sum()
+        elif(selected_menu == "4"):
+            show_menu()
         elif(selected_menu == "0"):
             exit()
         else:
