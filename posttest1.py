@@ -78,8 +78,8 @@ def show_menu():
     elif(selected_menu == "5"):
         clear_screen()
         print("========== SORT DATA LIST ==========")
-        print("[1] Secara Ascending")
-        print("[2] Secara Descending")
+        print("[1] Secara Ascending (Metode QuickSort)")
+        print("[2] Secara Descending (Metode QuickSort)")
         print("[3] Back")
         print("[0] Exit")
         print("-----------------------------------")
@@ -245,11 +245,45 @@ def update_list():
     print("List saat ini:", nim)
     back_to_show_menu()
 
+def partitionAsc(arr, low, high):
+    i = (low - 1)
+    pivot = arr[high]
+    for j in range(low, high):  
+        if arr[j] <= pivot:
+            i = i+1
+            arr[i], arr[j] = arr[j], arr[i]
+    arr[i+1], arr[high] = arr[high], arr[i+1]
+    return (i + 1)
+
+def partition(arr, low, high, tipe):
+    i = (low - 1)
+    pivot = arr[high]
+    for j in range(low, high):  
+        if tipe == "asc":
+            if arr[j] <= pivot:
+                i = i+1
+                arr[i], arr[j] = arr[j], arr[i]
+        else:
+            if arr[j] >= pivot:
+                i = i+1
+                arr[i], arr[j] = arr[j], arr[i]
+    arr[i+1], arr[high] = arr[high], arr[i+1]
+    return (i + 1)
+
+def quickSort(arr, low, high, tipe):
+    if len(arr) == 1:
+        return arr
+    if low < high:
+        pi = partition(arr, low, high, tipe)
+        quickSort(arr, low, pi-1, tipe)
+        quickSort(arr, pi+1, high, tipe)
+
 def sort_list_asc():
     clear_screen()
     print("========== SORT DATA LIST ==========")
     print("List saat ini:", nim)
-    nim.sort()
+    n = len(nim)
+    quickSort(nim, 0, n - 1, "asc")
     print("Data pada list berhasil diurutkan secara ascending.")
     print("List saat ini:", nim)
     back_to_show_menu()
@@ -258,7 +292,8 @@ def sort_list_desc():
     clear_screen()
     print("========== SORT DATA LIST ==========")
     print("List saat ini:", nim)
-    nim.sort(reverse=True)
+    n = len(nim)
+    quickSort(nim, 0, n - 1, "desc")
     print("Data pada list berhasil diurutkan secara descending.")
     print("List saat ini:", nim)
     back_to_show_menu()
