@@ -180,7 +180,7 @@ def add_list_insert():
         input("Tekan 'Enter' untuk melanjutkan...")
         add_list_insert()
     nim.insert(index, new_data)
-    print("Data", new_data, "pada indeks" + index + "berhasil ditambahkan!")
+    print("Data", new_data, "pada indeks", index, "berhasil ditambahkan!")
     print("List saat ini:", nim)
     back_to_show_menu()
 
