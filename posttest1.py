@@ -238,7 +238,7 @@ def update_list():
         input("Tekan 'Enter' untuk melanjutkan...")
         update_list()
     nim[index] = new_data
-    print("Data", new_data, "pada indeks" + index + "berhasil diperbaharui!")
+    print("Data", new_data, "pada indeks", index, "berhasil diperbaharui!")
     print("List saat ini:", nim)
     back_to_show_menu()
 
