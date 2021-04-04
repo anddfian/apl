@@ -23,10 +23,7 @@ def show_menu():
     print("-----------------------------------")
     selected_menu = input("Pilih menu> ")
     if(selected_menu == "1"):
-        clear_screen()
-        print("========== DATA LIST ==========")
-        print(nim)
-        back_to_show_menu()
+        show_list()
     elif(selected_menu == "2"):
         clear_screen()
         print("========== TAMBAH DATA LIST ==========")
@@ -53,20 +50,44 @@ def show_menu():
     elif(selected_menu == "3"):
         clear_screen()
         print("========== HAPUS DATA LIST ==========")
-        print("[1] Menggunakan Metode Remove")
-        print("[2] Menggunakan Metode Pop")
-        print("[3] Menggunakan Metode Clear")
-        print("[4] Back")
+        print("[1] Menggunakan Kata Kunci Del")
+        print("[2] Menggunakan Metode Remove")
+        print("[3] Menggunakan Metode Pop")
+        print("[4] Menggunakan Metode Clear")
+        print("[5] Back")
         print("[0] Exit")
         print("-----------------------------------")
         selected_menu = input("Pilih menu> ")
         if(selected_menu == "1"):
-            delete_list_remove()
+            clear_screen()
+            print("========== HAPUS DATA LIST ==========")
+            print("[1] 1 Data")
+            print("[2] Multi Data")
+            print("[3] Semua Data")
+            print("[4] Back")
+            print("[0] Exit")
+            print("-----------------------------------")
+            selected_menu = input("Pilih menu> ")
+            if(selected_menu == "1"):
+                delete_list_del_one()
+            elif(selected_menu == "2"):
+                delete_list_del_multiple()
+            elif(selected_menu == "3"):
+                delete_list_del_all()
+            elif(selected_menu == "4"):
+                show_menu()
+            elif(selected_menu == "0"):
+                exit()
+            else:
+                print("Kamu memilih menu yang salah!")
+                back_to_show_menu()            
         elif(selected_menu == "2"):
-            delete_list_pop()
+            delete_list_remove()
         elif(selected_menu == "3"):
-            delete_list_clear()
+            delete_list_pop()
         elif(selected_menu == "4"):
+            delete_list_clear()
+        elif(selected_menu == "5"):
             show_menu()
         elif(selected_menu == "0"):
             exit()
@@ -135,6 +156,12 @@ def show_menu():
 def back_to_show_menu():
     input("\nTekan 'Enter' untuk kembali ke menu utama...")
     show_menu()
+
+def show_list():
+    clear_screen()
+    print("========== DATA LIST ==========")
+    print("List saat ini:", nim)
+    back_to_show_menu()
 
 def add_list_append():
     clear_screen()
@@ -229,6 +256,48 @@ def delete_list_clear():
     print("List saat ini:", nim)
     back_to_show_menu()
 
+def delete_list_del_one():
+    clear_screen()
+    print("========== HAPUS DATA LIST ==========")
+    print("List saat ini:", nim)
+    try:
+        index = int(input("Masukkan indeks data yang ingin dihapus: "))
+    except(TypeError):
+        print("Hanya boleh masukkan data angka!")
+        input("Tekan 'Enter' untuk melanjutkan...")
+        delete_list_del_one()
+    del nim[index]
+    print("Data pada indeks", index, "berhasil dihapus!")
+    print("List saat ini:", nim)
+    back_to_show_menu()
+
+def delete_list_del_multiple():
+    clear_screen()
+    print("========== HAPUS DATA LIST ==========")
+    print("List saat ini:", nim)
+    try:
+        initial_index = int(input("Masukkan indeks awal data yang ingin dihapus: "))
+        final_index = int(input("Masukkan indeks akhir data yang ingin dihapus: "))
+    except(TypeError):
+        print("Hanya boleh masukkan data angka!")
+        input("Tekan 'Enter' untuk melanjutkan...")
+        delete_list_del_multiple()
+    del nim[initial_index:final_index]
+    print("Data pada indeks", initial_index, "hingga indeks", final_index, "berhasil dihapus!")
+    print("List saat ini:", nim)
+    back_to_show_menu()
+
+def delete_list_del_all():
+    clear_screen()
+    global nim
+    print("========== HAPUS DATA LIST ==========")
+    print("List saat ini:", nim)
+    del nim
+    print("Semua data pada list berhasil dihapus!")
+    nim = []
+    print("List saat ini:", nim)
+    back_to_show_menu()
+
 def update_list():
     clear_screen()
     print("========== UPDATE DATA LIST ==========")
@@ -244,16 +313,6 @@ def update_list():
     print("Data", new_data, "pada indeks", index, "berhasil diperbaharui!")
     print("List saat ini:", nim)
     back_to_show_menu()
-
-def partitionAsc(arr, low, high):
-    i = (low - 1)
-    pivot = arr[high]
-    for j in range(low, high):  
-        if arr[j] <= pivot:
-            i = i+1
-            arr[i], arr[j] = arr[j], arr[i]
-    arr[i+1], arr[high] = arr[high], arr[i+1]
-    return (i + 1)
 
 def partition(arr, low, high, tipe):
     i = (low - 1)
