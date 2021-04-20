@@ -463,7 +463,7 @@ def meja_pertama():
     print("===========================================")
     nik = int(input("Masukkan NIK      : "))
     status = query_meja_pertama(nik)
-    if(status >= 0 and status < 3):
+    if(status >= 0 and status < 2):
         input("\nTekan 'Enter' untuk melanjutkan...")
         meja_kedua(nik, status)
     elif(status == 2):
@@ -484,7 +484,7 @@ def meja_kedua(nik, tahap):
     print("===========================================")
     print("|                MEJA KEDUA               |")
     print("===========================================")
-    suhu =  int(input("Masukkan Suhu Tubuh    : "))
+    suhu =  float(input("Masukkan Suhu Tubuh    : "))
     tekanan_darah = int(input("Masukkan Tekanan Darah : "))
     status = insert_meja_kedua(nik, tahap, suhu, tekanan_darah)
     if(status == True):
