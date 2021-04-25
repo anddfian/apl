@@ -333,6 +333,10 @@ def data_vaksin():
         print("=======================================================")
         selected_menu = str(input("Pilih menu> "))
         if(selected_menu == "1"):
+            clear_screen()
+            print("=======================================================")
+            print("|                 DATA VAKSIN COVID-19                |")
+            print("=======================================================")
             indeks = 1
             for i in range(len(database["Vaksin"])):
                 print("Vaksin ke-", indeks)
@@ -346,6 +350,10 @@ def data_vaksin():
                 print("| Error: Tidak ada data vaksin yang tersedia          |")
                 print("=======================================================")
         elif(selected_menu == "2"):
+            clear_screen()
+            print("=======================================================")
+            print("|                 DATA VAKSIN COVID-19                |")
+            print("=======================================================")
             nama = str(input("Masukkan Nama Vaksin     : "))
             produksi = str(input("Masukkan Produksi Vaksin : "))
             database["Vaksin"].append({"Nama": nama, "Produksi": produksi, "Nomor": []})
@@ -353,6 +361,18 @@ def data_vaksin():
             print("| Sukses: Data Vaksin berhasil ditambahkan            |")
             print("=======================================================")
         elif(selected_menu == "3"):
+            clear_screen()
+            print("=======================================================")
+            print("|                 DATA VAKSIN COVID-19                |")
+            print("=======================================================")
+            indeks = 1
+            for i in range(len(database["Vaksin"])):
+                print("Vaksin ke-", indeks)
+                print("Nama Vaksin :", database["Vaksin"][i]["Nama"])
+                print("Produksi    :", database["Vaksin"][i]["Produksi"])
+                print("Penggunaan  :", len(database["Vaksin"][i]["Nomor"]))
+                print("=======================================================")
+                indeks += 1
             if(len(database["Vaksin"]) < 1):
                 print("=======================================================")
                 print("| Error: Tidak ada data vaksin yang tersedia          |")
@@ -367,6 +387,18 @@ def data_vaksin():
                 print("| Sukses: Data Vaksin berhasil diperbaharui           |")
                 print("=======================================================")
         elif(selected_menu == "4"):
+            clear_screen()
+            print("=======================================================")
+            print("|                 DATA VAKSIN COVID-19                |")
+            print("=======================================================")
+            indeks = 1
+            for i in range(len(database["Vaksin"])):
+                print("Vaksin ke-", indeks)
+                print("Nama Vaksin :", database["Vaksin"][i]["Nama"])
+                print("Produksi    :", database["Vaksin"][i]["Produksi"])
+                print("Penggunaan  :", len(database["Vaksin"][i]["Nomor"]))
+                print("=======================================================")
+                indeks += 1
             if(len(database["Vaksin"]) < 1):
                 print("=======================================================")
                 print("| Error: Tidak ada data vaksin yang tersedia          |")
