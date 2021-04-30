@@ -572,10 +572,7 @@ def data_vaksin():
                     datasort.append([database["Vaksin"][i]["Produksi"], i])
             quickSort(datasort, 0, len(datasort)-1, "Ascending")
             for i in range(len(database["Vaksin"])):
-                if(searching == "Nama"):
-                    datasearch.append(datasort[i][0])
-                elif(searching == "Produksi"):
-                    datasearch.append(datasort[i][0])
+                datasearch.append(datasort[i][0])
             if(metode == "Linear"):
                 result = linearSearch(datasearch, len(datasearch), search)
             elif(metode == "Binary"):
