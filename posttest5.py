@@ -9,7 +9,7 @@ database = {
         "Data": []
     },
     "Vaksin": [
-        {'Nama': 'Sinovac', 'Produksi': 'Sinovac Biotech', 'Nomor': [2036]},
+        {'Nama': 'Sinovac', 'Produksi': 'Sinovac Biotech', 'Nomor': []},
         {'Nama': 'Merah Putih', 'Produksi': 'PT Bio Farma', 'Nomor': []},
     ],
     "Account": {
