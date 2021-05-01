@@ -9,7 +9,7 @@ database = {
         "Data": []
     },
     "Vaksin": [
-        {'Nama': 'Sinovac', 'Produksi': 'Sinovac Biotech', 'Nomor': []},
+        {'Nama': 'Sinovac', 'Produksi': 'Sinovac Biotech', 'Nomor': [2036]},
         {'Nama': 'Merah Putih', 'Produksi': 'PT Bio Farma', 'Nomor': []},
     ],
     "Account": {
@@ -522,7 +522,8 @@ def data_vaksin():
             print("=======================================================")
             print("| [1] Nama Vaksin                                     |")
             print("| [2] Produksi Vaksin                                 |")
-            print("| [3] Kembali                                         |")
+            print("| [3] Penggunaan Vaksin                               |")
+            print("| [4] Kembali                                         |")
             print("=======================================================")
             searching = ""
             selected_menu = str(input("Pilih menu> "))
@@ -531,6 +532,8 @@ def data_vaksin():
             elif(selected_menu == "2"):
                 searching = "Produksi"
             elif(selected_menu == "3"):
+                searching = "Penggunaan"
+            elif(selected_menu == "4"):
                 data_vaksin()
             else:
                 print("=======================================================")
@@ -543,7 +546,11 @@ def data_vaksin():
             print("=======================================================")
             print("| [1] Metode Linear Search                            |")
             print("| [2] Metode Binary Search                            |")
-            print("| [3] Kembali                                         |")
+            if(searching == "Penggunaan"):
+                print("| [3] Metode Interpolation Search                     |")
+                print("| [4] Kembali                                         |")
+            else:
+                print("| [3] Kembali                                         |")
             print("=======================================================")
             metode = ""
             selected_menu = str(input("Pilih menu> "))
@@ -551,18 +558,37 @@ def data_vaksin():
                 metode = "Linear"
             elif(selected_menu == "2"):
                 metode = "Binary"
-            elif(selected_menu == "3"):
-                data_vaksin()
+            if(searching == "Penggunaan"):
+                if(selected_menu == "3"):
+                    metode = "Interpolation"
+                elif(selected_menu == "4"):
+                    data_vaksin()
+                else:
+                    print("=======================================================")
+                    print("| Error: Anda memilih menu yang salah!                |")
+                    print("=======================================================")
+                    back_to_data_vaksin()
             else:
-                print("=======================================================")
-                print("| Error: Anda memilih menu yang salah!                |")
-                print("=======================================================")
-                back_to_data_vaksin()
+                if(selected_menu == "3"):
+                    data_vaksin()
+                else:
+                    print("=======================================================")
+                    print("| Error: Anda memilih menu yang salah!                |")
+                    print("=======================================================")
+                    back_to_data_vaksin()
             clear_screen()
             print("=======================================================")
             print("|                 DATA VAKSIN COVID-19                |")
             print("=======================================================")
-            search = str(input("Data yang ingin dicari> "))
+            if(searching == "Penggunaan"):
+                search = int(input("Data yang ingin dicari> "))
+                if(search < 1):
+                    print("=======================================================")
+                    print("| Gagal: Tidak dapat mencari data 0!                  |")
+                    print("=======================================================")
+                    back_to_data_vaksin()
+            else:
+                search = str(input("Data yang ingin dicari> "))
             datasort = []
             datasearch = []
             for i in range(len(database["Vaksin"])):
@@ -570,6 +596,8 @@ def data_vaksin():
                     datasort.append([database["Vaksin"][i]["Nama"], i])
                 elif(searching == "Produksi"):
                     datasort.append([database["Vaksin"][i]["Produksi"], i])
+                elif(searching == "Penggunaan"):
+                    datasort.append([len(database["Vaksin"][i]["Nomor"]), i])
             quickSort(datasort, 0, len(datasort)-1, "Ascending")
             for i in range(len(database["Vaksin"])):
                 datasearch.append(datasort[i][0])
@@ -577,6 +605,8 @@ def data_vaksin():
                 result = linearSearch(datasearch, len(datasearch), search)
             elif(metode == "Binary"):
                 result = binarySearch(datasearch, search, 0, len(datasearch) - 1)
+            elif(metode == "Interpolation"):
+                result = interpolationSearch(datasearch, 0, len(datasearch) - 1, search)
             if(result != -1):
                 print("=======================================================")
                 print("| Sukses: Data ditemukan pada indeks ke-%d" % datasort[result][1])
