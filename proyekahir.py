@@ -1,6 +1,6 @@
 import os
-import time
-import datetime
+from time import sleep
+from datetime import datetime
 import csv
 
 session_account = {}
@@ -62,13 +62,17 @@ def show_auth():
         print("========================================================================")
         back_to_show_auth()
 
+def back_to_show_auth():
+    input("\nTekan 'Enter' untuk kembali...")
+    show_auth()
+
 def auth_register():
     clear_screen()
     print("========================================================================")
     print("|                              DAFTAR AKUN                             |")
     print("========================================================================")
-    print("| Info: Silakan isi Username, Password, NIK, Nama, Umur, No.HP, Alamat |")
-    print("|       dan Kode Unik akun anda                                        |")
+    print("| Info: Silakan isi Username, Password, Kode Unik, NIK, Nama, Umur,    |")
+    print("|       No. HP, dan Alamat akun anda                                   |")
     print("========================================================================")
     try:
         username = input("Username  : ")
@@ -99,7 +103,7 @@ def auth_register():
             print("| Error: Anda tidak dapat mengosongkan alamat                         |")
             print("========================================================================")
             back_to_auth_register()
-        now = datetime.datetime.now()
+        now = datetime.now()
         timestamp = "%d/%d/%d %d:%d:%d" % (now.day,now.month,now.year,now.hour,now.minute,now.second)
     except ValueError:
         print("========================================================================")
@@ -121,23 +125,20 @@ def auth_register():
         print("| Error: Akun tersebut telah didaftarkan!                              |")
         print("========================================================================")
         back_to_show_auth()
-    with open(csv_filename_accounts, mode="a") as csv_file:
-        fieldnames = ["Username", "Password", "Level", "NIK", "Nama", "Umur", "NoHP", "Alamat", "Vaksinasi", "Created"]
-        csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        if kodeunik == "admin":
-            csv_writer.writerow({"Username": username, "Password": password, "Level": kodeunik, "NIK": nik, "Nama": nama, "Umur": umur, "NoHP": nohp, "Alamat": alamat, "Vaksinasi": "False", "Created": timestamp})
-        elif kodeunik == "dinkes":
-            csv_writer.writerow({"Username": username, "Password": password, "Level": kodeunik, "NIK": nik, "Nama": nama, "Umur": umur, "NoHP": nohp, "Alamat": alamat, "Vaksinasi": "False", "Created": timestamp})
-        else:
-            csv_writer.writerow({"Username": username, "Password": password, "Level": "pasien", "NIK": nik, "Nama": nama, "Umur": umur, "NoHP": nohp, "Alamat": alamat, "Vaksinasi": "False", "Created": timestamp})
-    print("========================================================================")
-    print("| Sukses: Akun berhasil dibuat dan disimpan!                           |")
-    print("========================================================================")
-    back_to_show_login()
-
-def back_to_show_auth():
-    input("\nTekan 'Enter' untuk kembali...")
-    show_auth()
+    else:
+        with open(csv_filename_accounts, mode="a") as csv_file:
+            fieldnames = ["Username", "Password", "Level", "NIK", "Nama", "Umur", "NoHP", "Alamat", "Vaksinasi", "Created"]
+            csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            if kodeunik == "admin":
+                csv_writer.writerow({"Username": username, "Password": password, "Level": kodeunik, "NIK": nik, "Nama": nama, "Umur": umur, "NoHP": nohp, "Alamat": alamat, "Vaksinasi": "False", "Created": timestamp})
+            elif kodeunik == "dinkes":
+                csv_writer.writerow({"Username": username, "Password": password, "Level": kodeunik, "NIK": nik, "Nama": nama, "Umur": umur, "NoHP": nohp, "Alamat": alamat, "Vaksinasi": "False", "Created": timestamp})
+            else:
+                csv_writer.writerow({"Username": username, "Password": password, "Level": "pasien", "NIK": nik, "Nama": nama, "Umur": umur, "NoHP": nohp, "Alamat": alamat, "Vaksinasi": "False", "Created": timestamp})
+        print("========================================================================")
+        print("| Sukses: Akun berhasil dibuat dan disimpan!                           |")
+        print("========================================================================")
+        back_to_show_login()
 
 def back_to_auth_register():
     input("\nTekan 'Enter' untuk kembali...")
@@ -173,6 +174,10 @@ def show_login():
         print("| Error: Anda memilih menu yang salah!                                 |")
         print("========================================================================")
         back_to_show_login()
+
+def back_to_show_login():
+    input("\nTekan 'Enter' untuk kembali...")
+    show_login()
 
 def auth_login(level):
     clear_screen()
@@ -210,7 +215,7 @@ def auth_login(level):
                 print("========================================================================")
                 print("| Sukses: Anda akan dialihkan ke menu Pasien                           |")
                 print("========================================================================")
-                time.sleep(1.5)
+                sleep(1.5)
                 show_menu()
             else:
                 print("========================================================================")
@@ -241,7 +246,7 @@ def auth_login(level):
                 print("========================================================================")
                 print("| Sukses: Anda akan dialihkan ke menu Dinkes                           |")
                 print("========================================================================")
-                time.sleep(1.5)
+                sleep(1.5)
                 show_menu()
             else:
                 print("========================================================================")
@@ -272,7 +277,7 @@ def auth_login(level):
                 print("========================================================================")
                 print("| Sukses: Anda akan dialihkan ke menu Admin                            |")
                 print("========================================================================")
-                time.sleep(1.5)
+                sleep(1.5)
                 show_menu()
             else:
                 print("========================================================================")
@@ -285,10 +290,6 @@ def auth_login(level):
             print("========================================================================")
             back_to_show_login()
 
-def back_to_show_login():
-    input("\nTekan 'Enter' untuk kembali...")
-    show_login()
-
 def forgot_password():
     clear_screen()
     print("========================================================================")
@@ -296,8 +297,14 @@ def forgot_password():
     print("========================================================================")
     print("| Info: Masukkan Username dan NIK Anda                                 |")
     print("========================================================================")
-    username = input("Username : ")
-    nik = input("NIK      : ")
+    try:
+        username = input("Username : ")
+        nik = int(input("NIK      : "))
+    except ValueError:
+        print("========================================================================")
+        print("| Error: Ups! Itu bukan nomor yang valid. Coba lagi...                 |")
+        print("========================================================================")
+        back_to_forgot_password()
     akun = []
     with open(csv_filename_accounts, mode="r") as csv_file:
         csv_reader = csv.DictReader(csv_file)
@@ -337,6 +344,10 @@ def forgot_password():
         print("| Error: Data akun tidak ditemukan!                                    |")
         print("========================================================================")
     back_to_show_login()
+
+def back_to_forgot_password():
+    input("\nTekan 'Enter' untuk kembali...")
+    forgot_password()
 
 def show_menu():
     clear_screen()
@@ -498,7 +509,7 @@ def data_vaksin():
     elif session_account["Level"] == "dinkes":
         print("| [1] Lihat Data Vaksin COVID-19                                       |")
         print("| [2] Tambah Data Vaksin COVID-19                                      |")
-        print("| [3] Perbaharui Vaksin COVID-19                                       |")
+        print("| [3] Edit Vaksin COVID-19                                             |")
         print("| [4] Hapus Vaksin COVID-19                                            |")
         print("| [5] Urut Vaksin COVID-19                                             |")
         print("| [6] Cari Vaksin COVID-19                                             |")
@@ -856,7 +867,7 @@ def data_vaksinasi():
     print("========================================================================")
     print("|                        DATA VAKSINASI COVID-19                       |")
     print("========================================================================")
-    now = datetime.datetime.now()
+    now = datetime.now()
     akun = []
     with open(csv_filename_accounts, mode="r") as csv_file:
         csv_reader = csv.DictReader(csv_file)
@@ -1054,7 +1065,7 @@ def final_vaksinasi():
     print("Nomor Batch Vaksin :", session_vaksinasi["Nomor"])
     print("KIPI               :", session_vaksinasi["KIPI"])
     print("========================================================================")
-    now = datetime.datetime.now()
+    now = datetime.now()
     timestamp = "%d/%d/%d %d:%d:%d" % (now.day,now.month,now.year,now.hour,now.minute,now.second)
     with open(csv_filename_vaksinasi, mode="a") as csv_file:
         fieldnames = ["Timestamp", "NIK", "Suhu", "Tekanan", "Vaksin", "Nomor", "KIPI"]
@@ -1112,7 +1123,7 @@ def close_app():
     print("========================================================================")
     print("| Info: Terima kasih telah menggunakan Aplikasi Vaksinasi COVID-19     |")
     print("========================================================================")
-    time.sleep(3)
+    sleep(3)
     exit()
 
 def tentang_aplikasi():
@@ -1132,7 +1143,7 @@ def tentang_aplikasi():
     print("|                      : 90020219079 (Jenius)                          |")
     print("|                      : 085346816962 (Dana/OVO/Gopay)                 |")
     print("|                                                                      |")
-    print("|              Hak Cipta © 2020 Vaksinasi COVID-19                     |")
+    print("|              Hak Cipta © 2021 Vaksinasi COVID-19                     |")
     print("========================================================================")
     back_to_show_menu()
 
@@ -1383,8 +1394,8 @@ def create_account():
     print("========================================================================")
     print("|                          BUAT AKUN PENGGUNA                          |")
     print("========================================================================")
-    print("| Info: Silakan isi Username, Password, NIK, Nama, Umur, No.HP, Alamat |")
-    print("|       dan Kode Unik akun anda                                        |")
+    print("| Info: Silakan isi Username, Password, Kode Unik, NIK, Nama, Umur,    |")
+    print("|       No. HP, dan Alamat akun anda                                   |")
     print("========================================================================")
     try:
         username = input("Username  : ")
@@ -1415,7 +1426,7 @@ def create_account():
             print("| Error: Anda tidak dapat mengosongkan Alamat                         |")
             print("========================================================================")
             back_to_auth_register()
-        now = datetime.datetime.now()
+        now = datetime.now()
         timestamp = "%d/%d/%d %d:%d:%d" % (now.day,now.month,now.year,now.hour,now.minute,now.second)
     except ValueError:
         print("========================================================================")
@@ -1777,10 +1788,6 @@ def back_to_sort_account():
     input("\nTekan 'Enter' untuk kembali...")
     sort_account()
 
-def back_to_search_account():
-    input("\nTekan 'Enter' untuk kembali...")
-    search_account()
-
 def search_account():
     clear_screen()
     print("========================================================================")
@@ -1979,6 +1986,10 @@ def search_account():
         print("| Gagal: Data Pengguna tidak ditemukan!                                |")
         print("========================================================================")
     back_to_show_menu()
+
+def back_to_search_account():
+    input("\nTekan 'Enter' untuk kembali...")
+    search_account()
 
 def bubbleSort(array, order):
     for i in range(len(array)):
