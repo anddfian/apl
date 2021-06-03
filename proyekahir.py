@@ -1687,7 +1687,7 @@ def create_account():
         with open(csv_filename_accounts, mode="a") as csv_file:
             fieldnames = ["Username", "Password", "Level", "NIK", "NIP", "Nama", "Umur", "NoHP", "Alamat", "Vaksinasi", "Created", "Updated", "Log"]
             csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-            csv_writer.writerow({"Username": username, "Password": password, "Level": "pasien", "NIK": nik, "NIP": "", "Nama": nama, "Umur": umur, "NoHP": nohp, "Alamat": alamat, "Vaksinasi": "False", "Created": timestamp_now(), "Updated": timestamp_now(), "Log": username})
+            csv_writer.writerow({"Username": username, "Password": password, "Level": "pasien", "NIK": nik, "NIP": "", "Nama": nama, "Umur": umur, "NoHP": nohp, "Alamat": alamat, "Vaksinasi": "False", "Created": timestamp_now(), "Updated": timestamp_now(), "Log": session_account["Username"]})
             print("========================================================================")
             print("| Sukses: Akun Baru berhasil dibuat dan disimpan!                      |")
             print("========================================================================")
