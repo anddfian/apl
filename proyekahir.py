@@ -1,7 +1,7 @@
 import os
+import csv
 from time import sleep
 from datetime import datetime
-import csv
 
 session_account = {}
 session_vaksinasi = {}
@@ -361,6 +361,11 @@ def auth_login(level):
             return back_to_show_login()
 
 def forgot_password():
+    akun = []
+    with open(csv_filename_accounts, mode="r") as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader:
+            akun.append(row)
     clear_screen()
     print("========================================================================")
     print("|                             LUPA PASSWORD                            |")
@@ -385,11 +390,6 @@ def forgot_password():
             print("| Error: Ups! Itu bukan nomor yang valid. Coba lagi...                 |")
             print("========================================================================")
             return back_to_forgot_password()
-        akun = []
-        with open(csv_filename_accounts, mode="r") as csv_file:
-            csv_reader = csv.DictReader(csv_file)
-            for row in csv_reader:
-                akun.append(row)
         data_found = False
         indeks = 0
         for data in akun:
@@ -399,16 +399,18 @@ def forgot_password():
             indeks += 1
         if data_found == True:
             data_match = False
+            indeks = 0
             for data in akun:
-                if data["Username"] == username and int(data["NIK"]) == nik:
-                    akun[indeks]["Password"] = "vaksinasi"
-                    akun[indeks]["Updated"] = timestamp_now()
-                    akun[indeks]["Log"] = akun[indeks]["Username"]
-                    print("========================================================================")
-                    print("| Sukses: Password berhasil di reset! New Password : vaksinasi         |")
-                    print("========================================================================")
-                    data_match = True
-                    break
+                if data["Level"] == "pasien":
+                    if data["Username"] == username and int(data["NIK"]) == nik:
+                        akun[indeks]["Password"] = "vaksinasi"
+                        akun[indeks]["Updated"] = timestamp_now()
+                        akun[indeks]["Log"] = akun[indeks]["Username"]
+                        print("========================================================================")
+                        print("| Sukses: Password berhasil di reset! New Password : vaksinasi         |")
+                        print("========================================================================")
+                        data_match = True
+                        break
                 indeks += 1
             if data_match == False:
                 print("========================================================================")
@@ -444,11 +446,6 @@ def forgot_password():
             print("| Error: Ups! Itu bukan nomor yang valid. Coba lagi...                 |")
             print("========================================================================")
             return back_to_forgot_password()
-        akun = []
-        with open(csv_filename_accounts, mode="r") as csv_file:
-            csv_reader = csv.DictReader(csv_file)
-            for row in csv_reader:
-                akun.append(row)
         data_found = False
         indeks = 0
         for data in akun:
@@ -458,16 +455,18 @@ def forgot_password():
             indeks += 1
         if data_found == True:
             data_match = False
+            indeks = 0
             for data in akun:
-                if data["Username"] == username and int(data["NIK"]) == nik and int(data["NIP"]) == nip:
-                    akun[indeks]["Password"] = "vaksinasi"
-                    akun[indeks]["Updated"] = timestamp_now()
-                    akun[indeks]["Log"] = akun[indeks]["Username"]
-                    print("========================================================================")
-                    print("| Sukses: Password berhasil di reset! New Password : vaksinasi         |")
-                    print("========================================================================")
-                    data_match = True
-                    break
+                if data["Level"] == "dinkes":
+                    if data["Username"] == username and int(data["NIK"]) == nik and int(data["NIP"]) == nip:
+                        akun[indeks]["Password"] = "vaksinasi"
+                        akun[indeks]["Updated"] = timestamp_now()
+                        akun[indeks]["Log"] = akun[indeks]["Username"]
+                        print("========================================================================")
+                        print("| Sukses: Password berhasil di reset! New Password : vaksinasi         |")
+                        print("========================================================================")
+                        data_match = True
+                        break
                 indeks += 1
             if data_match == False:
                 print("========================================================================")
@@ -687,7 +686,17 @@ def data_vaksin():
             print("|                         DATA VAKSIN COVID-19                         |")
             print("========================================================================")
             nama = input("Masukkan Nama Vaksin     : ")
+            if len(nama) < 1:
+                print("========================================================================")
+                print("| Error: Anda tidak dapat mengosongkan nama vaksin!                    |")
+                print("========================================================================")
+                return back_to_data_vaksin()
             produksi = input("Masukkan Produksi Vaksin : ")
+            if len(produksi) < 1:
+                print("========================================================================")
+                print("| Error: Anda tidak dapat mengosongkan produksi vaksin!                |")
+                print("========================================================================")
+                return back_to_data_vaksin()
             with open(csv_filename_vaksin, mode="a") as csv_file:
                 fieldnames = ["Nama", "Produksi", "Penggunaan", "Created", "Updated", "Log"]
                 csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -759,7 +768,7 @@ def data_vaksin():
                 print("========================================================================")
             else:
                 try:
-                    nomor = int(input("Masukkan Nomor Vaksin    : "))
+                    nomor = int(input("Masukkan Nomor Vaksin : "))
                     vaksin.pop(nomor-1)
                     with open(csv_filename_vaksin, mode="w") as csv_file:
                         fieldnames = ["Nama", "Produksi", "Penggunaan", "Created", "Updated", "Log"]
@@ -948,11 +957,7 @@ def data_vaksin():
             print("========================================================================")
             print("| [1] Metode Linear Search                                             |")
             print("| [2] Metode Binary Search                                             |")
-            if searching == "Penggunaan":
-                print("| [3] Metode Interpolation Search                                      |")
-                print("| [4] Kembali                                                          |")
-            else:
-                print("| [3] Kembali                                                          |")
+            print("| [3] Kembali                                                          |")
             print("========================================================================")
             metode = ""
             selected_menu = input("Pilih Menu> ")
@@ -960,47 +965,23 @@ def data_vaksin():
                 metode = "Linear"
             elif selected_menu == "2":
                 metode = "Binary"
-            if searching == "Penggunaan":
-                if selected_menu == "1" or selected_menu == "2" or selected_menu == "4" or selected_menu == "5" or selected_menu == "6":
-                    pass
-                elif selected_menu == "3":
-                    metode = "Interpolation"
-                elif selected_menu == "4":
-                    return data_vaksin()
-                else:
-                    print("========================================================================")
-                    print("| Error: Anda memilih menu yang salah!                                 |")
-                    print("========================================================================")
-                    return back_to_data_vaksin()
+            elif selected_menu == "3":
+                return data_vaksin()
             else:
-                if selected_menu == "1" or selected_menu == "2" or selected_menu == "4" or selected_menu == "5" or selected_menu == "6":
-                    pass
-                elif selected_menu == "3":
-                    return data_vaksin()
-                else:
-                    print("========================================================================")
-                    print("| Error: Anda memilih menu yang salah!                                 |")
-                    print("========================================================================")
-                    return back_to_data_vaksin()
+                print("========================================================================")
+                print("| Error: Anda memilih menu yang salah!                                 |")
+                print("========================================================================")
+                return back_to_data_vaksin()
             clear_screen()
             print("========================================================================")
             print("|                         DATA VAKSIN COVID-19                         |")
             print("========================================================================")
-            if searching == "Penggunaan":
-                try:
-                    search = int(input("Data yang ingin dicari> "))
-                    if search < 1:
-                        print("========================================================================")
-                        print("| Gagal: Tidak dapat mencari data kurang dari 1!                       |")
-                        print("========================================================================")
-                        return back_to_data_vaksin()
-                except ValueError:
-                    print("========================================================================")
-                    print("| Error: Ups! Itu bukan nomor yang valid. Coba lagi...                 |")
-                    print("========================================================================")
-                    return back_to_data_vaksin()
-            else:
-                search = input("Data yang ingin dicari> ")
+            search = input("Data yang ingin dicari> ")
+            if len(search) < 1:
+                print("========================================================================")
+                print("| Error: Anda tidak dapat mengosongkan data yang ingin dicari          |")
+                print("========================================================================")
+                return back_to_data_vaksin()
             datasort = []
             datasearch = []
             indeks = 0
@@ -1025,16 +1006,19 @@ def data_vaksin():
                 result = linearSearch(datasearch, len(datasearch), search)
             elif metode == "Binary":
                 result = binarySearch(datasearch, search, 0, len(datasearch) - 1)
-            elif metode == "Interpolation":
-                result = interpolationSearch(datasearch, 0, len(datasearch) - 1, search)
+            # elif metode == "Interpolation":
+            #     result = interpolationSearch(datasearch, 0, len(datasearch) - 1, search)
             if result != -1:
                 print("========================================================================")
                 print("| Sukses: Data Vaksin ditemukan!                                       |")
                 print("========================================================================")
-                print("| Vaksin ke-%d" % datasort[result][1])
+                print("| Vaksin ke-%d" % (datasort[result][1] + 1))
                 print("| Nama Vaksin :", vaksin[datasort[result][1]]["Nama"])
                 print("| Produksi    :", vaksin[datasort[result][1]]["Produksi"])
                 print("| Penggunaan  :", vaksin[datasort[result][1]]["Penggunaan"])
+                print("| Created     :", vaksin[datasort[result][1]]["Created"])
+                print("| Penggunaan  :", vaksin[datasort[result][1]]["Updated"])
+                print("| Log         :", vaksin[datasort[result][1]]["Log"])
                 print("========================================================================")
             else:
                 print("========================================================================")
@@ -1614,7 +1598,7 @@ def show_account():
             print("========================================================================")
     else:
         print("========================================================================")
-        print("| Error: Tidak ada data pengguna ditemukan!                            |")
+        print("| Error: Tidak ada data pengguna!                                      |")
         print("========================================================================")
     return back_to_show_menu()
 
@@ -2140,6 +2124,8 @@ def sort_account():
                 datasort.append([data["Level"], indeks])
             elif sorting == "NIK":
                 datasort.append([data["NIK"], indeks])
+            elif sorting == "NIP":
+                datasort.append([data["NIP"], indeks])
             elif sorting == "Nama":
                 datasort.append([data["Nama"], indeks])
             elif sorting == "Umur":
@@ -2246,11 +2232,7 @@ def search_account():
     print("========================================================================")
     print("| [1] Metode Linear Search                                             |")
     print("| [2] Metode Binary Search                                             |")
-    if searching == "NIK" or searching == "NIP" or searching == "Umur" or searching == "NoHP":
-        print("| [3] Metode Interpolation Search                                      |")
-        print("| [4] Kembali                                                          |")
-    else:
-        print("| [3] Kembali                                                          |")
+    print("| [3] Kembali                                                          |")
     print("========================================================================")
     metode_searching = ""
     selected_menu = input("Pilih Menu> ")
@@ -2258,28 +2240,13 @@ def search_account():
         metode_searching = "Linear"
     elif selected_menu == "2":
         metode_searching = "Binary"
-    if searching == "NIK" or searching == "NIP" or searching == "Umur" or searching == "NoHP":
-        if selected_menu == "1" or selected_menu == "2":
-            pass
-        elif selected_menu == "3":
-            metode_searching = "Interpolation"
-        elif selected_menu == "4":
-            return search_account()
-        else:
-            print("========================================================================")
-            print("| Error: Anda memilih menu yang salah!                                 |")
-            print("========================================================================")
-            return back_to_search_account()
+    elif selected_menu == "3":
+        return search_account()
     else:
-        if selected_menu == "1" or selected_menu == "2":
-            pass
-        elif selected_menu == "3":
-            return search_account()
-        else:
-            print("========================================================================")
-            print("| Error: Anda memilih menu yang salah!                                 |")
-            print("========================================================================")
-            return back_to_search_account()
+        print("========================================================================")
+        print("| Error: Anda memilih menu yang salah!                                 |")
+        print("========================================================================")
+        return back_to_search_account()
     clear_screen()
     print("========================================================================")
     print("|                          CARI AKUN PENGGUNA                          |")
@@ -2317,21 +2284,12 @@ def search_account():
     print("========================================================================")
     print("|                          CARI AKUN PENGGUNA                          |")
     print("========================================================================")
-    if searching == "NIK" or searching == "NIP" or searching == "Umur" or searching == "NoHP":
-        try:
-            search = int(input("Data yang ingin dicari> "))
-            if search < 1:
-                print("========================================================================")
-                print("| Gagal: Tidak dapat mencari data kurang dari 1!                       |")
-                print("========================================================================")
-                return back_to_search_account()
-        except ValueError:
-            print("========================================================================")
-            print("| Error: Ups! Itu bukan nomor yang valid. Coba lagi...                 |")
-            print("========================================================================")
-            return back_to_search_account()
-    else:
-        search = input("Data yang ingin dicari> ")
+    search = input("Data yang ingin dicari> ")
+    if len(search) < 1:
+        print("========================================================================")
+        print("| Error: Anda tidak dapat mengosongkan data yang ingin dicari          |")
+        print("========================================================================")
+        return back_to_search_account()
     datasort = []
     datasearch = []
     akun = []
@@ -2346,15 +2304,15 @@ def search_account():
         elif searching == "Level":
             datasort.append([data["Level"], indeks])
         elif searching == "NIK":
-            datasort.append([int(data["NIK"]), indeks])
+            datasort.append([data["NIK"], indeks])
         elif searching == "NIP":
-            datasort.append([int(data["NIP"]), indeks])
+            datasort.append([data["NIP"], indeks])
         elif searching == "Nama":
             datasort.append([data["Nama"], indeks])
         elif searching == "Umur":
-            datasort.append([int(data["Umur"]), indeks])
+            datasort.append([data["Umur"], indeks])
         elif searching == "NoHP":
-            datasort.append([int(data["NoHP"]), indeks])
+            datasort.append([data["NoHP"], indeks])
         elif searching == "Alamat":
             datasort.append([data["Alamat"], indeks])
         elif searching == "Vaksinasi":
@@ -2380,23 +2338,15 @@ def search_account():
         shellSort(datasort, len(datasort), "Ascending")
     for i in range(len(datasort)):
         datasearch.append(datasort[i][0])
-    if searching == "NIK" or searching == "NIP" or searching == "Umur" or searching == "NoHP":
-        if metode_searching == "Linear":
-            result = linearSearch(datasearch, len(datasearch), search)
-        elif metode_searching == "Binary":
-            result = binarySearch(datasearch, search, 0, len(datasearch) - 1)
-        elif metode_searching == "Interpolation":
-            result = interpolationSearch(datasearch, 0, len(datasearch) - 1, search)
-    else:
-        if metode_searching == "Linear":
-            result = linearSearch(datasearch, len(datasearch), search)
-        elif metode_searching == "Binary":
-            result = binarySearch(datasearch, search, 0, len(datasearch) - 1)
+    if metode_searching == "Linear":
+        result = linearSearch(datasearch, len(datasearch), search)
+    elif metode_searching == "Binary":
+        result = binarySearch(datasearch, search, 0, len(datasearch) - 1)
     if result != -1:
         print("========================================================================")
         print("| Sukses: Data Pengguna ditemukan!                                     |")
         print("========================================================================")
-        print("| Pengguna ke-%d" % datasort[result][1])
+        print("| Pengguna ke-%d" % (datasort[result][1] + 1))
         if akun[datasort[result][1]]["Level"] == "admin":
             print("| Username :", akun[datasort[result][1]]["Username"])
             print("| Password :", akun[datasort[result][1]]["Password"])
@@ -2573,17 +2523,6 @@ def binarySearch(array, x, low, high):
             low = mid + 1
         else:
             high = mid - 1
-    return -1
-
-def interpolationSearch(arr, lo, hi, x):
-    if lo <= hi and x >= arr[lo] and x <= arr[hi]:
-        pos = lo + ((hi - lo) // (arr[hi] - arr[lo]) * (x - arr[lo]))
-        if arr[pos] == x:
-            return pos
-        if arr[pos] < x:
-            return interpolationSearch(arr, pos + 1,hi, x)
-        if arr[pos] > x:
-            return interpolationSearch(arr, lo,pos - 1, x)
     return -1
 
 if __name__ == "__main__":
