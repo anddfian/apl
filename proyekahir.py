@@ -1,5 +1,4 @@
-import os
-import csv
+import os, csv
 from time import sleep
 from datetime import datetime
 
@@ -1006,8 +1005,6 @@ def data_vaksin():
                 result = linearSearch(datasearch, len(datasearch), search)
             elif metode == "Binary":
                 result = binarySearch(datasearch, search, 0, len(datasearch) - 1)
-            # elif metode == "Interpolation":
-            #     result = interpolationSearch(datasearch, 0, len(datasearch) - 1, search)
             if result != -1:
                 print("========================================================================")
                 print("| Sukses: Data Vaksin ditemukan!                                       |")
